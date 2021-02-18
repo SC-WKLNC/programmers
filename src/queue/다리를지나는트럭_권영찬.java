@@ -24,11 +24,6 @@ class BridgeQueue {
         this.maxLocation = bridgeLength;
         this.maxWeight = maxWeight;
         this.totalOfTrucks = truckWeights.length;
-        this.location = 0;
-        this.totalWeight = 0;
-        this.next = 0;
-        this.idxOfVeryFrontTruck = 0;
-        this.time = 0;
     }
     public int execute() {
         while(idxOfVeryFrontTruck < totalOfTrucks) {
