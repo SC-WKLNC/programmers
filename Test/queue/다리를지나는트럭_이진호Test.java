@@ -1,9 +1,7 @@
 package queue;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class 다리를지나는트럭_이진호Test {
 
@@ -28,7 +26,7 @@ public class 다리를지나는트럭_이진호Test {
         truck.solution(5, 5, new int[] {2,2,2,2,1,1,1,1,1}); //19*/
 
         int result = truck.solution(2, 10, new int[] {7,4,5,6}); //4
-        Assert.assertEquals(8,result);
+        Assertions.assertEquals(8,result);
 
 
 
@@ -41,73 +39,73 @@ public class 다리를지나는트럭_이진호Test {
     public void truck13(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result = truck.solution(5, 5, new int[] {1,1,1,1,1,2,2,2,2}); //19
-        Assert.assertEquals(19,result);
+        Assertions.assertEquals(19,result);
     }
     @Test
     public void truck12(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result =truck.solution(7, 7, new int[] {1,1,1,1,1,3,3}); //18
-        Assert.assertEquals(18,result);
+        Assertions.assertEquals(18,result);
     }
     @Test
     public void truck11(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result = truck.solution(5, 5, new int[] {1,1,1,1,1,2,2}); //14
-        Assert.assertEquals(14,result);
+        Assertions.assertEquals(14,result);
     }
     @Test
     public void truck10(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result =     truck.solution(3, 1, new int[] {1,1,1,1,1}); //16
-        Assert.assertEquals(16,result);
+        Assertions.assertEquals(16,result);
     }
     @Test
     public void truck9(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result =  truck.solution(3, 1, new int[] {1,1,1}); //
-        Assert.assertEquals(10,result);
+        Assertions.assertEquals(10,result);
     }
     @Test
     public void truck8(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result = truck.solution(4, 2, new int[] {1,1,1,1}); //4
-        Assert.assertEquals(10,result);
+        Assertions.assertEquals(10,result);
     }
     @Test
     public void truck1(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result = truck.solution(100, 100, new int[]{10,10,10,10,10,10,10,10,10,10}); //4
-        Assert.assertEquals(110,result);
+        Assertions.assertEquals(110,result);
     }
     @Test
     public void truck2(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result = truck.solution(1, 2, new int[] {1,1,1}); //4
-        Assert.assertEquals(4,result);
+        Assertions.assertEquals(4,result);
     }
     @Test
     public void truck3(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result = truck.solution(5, 5, new int[] {2,2,2,2,1,1,1,1,1});
-        Assert.assertEquals(19,result);
+        Assertions.assertEquals(19,result);
     }
     @Test
     public void truck4(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result =   truck.solution(5, 5, new int[] {1,1,1,1,1,2,2});
-        Assert.assertEquals(14,result);
+        Assertions.assertEquals(14,result);
     }
     @Test
     public void truck5(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result =   truck.solution(2, 10, new int[] {7,4,5,6});
-        Assert.assertEquals(8,result);
+        Assertions.assertEquals(8,result);
     }
     @Test
     public void truck6(){
         다리를지나는트럭_이진호 truck = new 다리를지나는트럭_이진호();
         int result =   truck.solution(100, 100, new int[] {10});
-        Assert.assertEquals(101,result);
+        Assertions.assertEquals(101,result);
     }
 
 }
