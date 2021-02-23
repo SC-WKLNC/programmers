@@ -5,17 +5,9 @@ public class 다리를지나는트럭_권영찬 {
 
 class BridgeQueue {
 
-    int[] truckWeights;
-    int[] queue;
-    int[] sequence;
-    int totalOfTrucks;
-    int maxLocation;
-    int location;
-    int maxWeight;
-    int totalWeight;
-    int next;
-    int idxOfVeryFrontTruck;
-    int time;
+    int[] truckWeights, queue, sequence;
+    int totalOfTrucks, maxLocation, location, maxWeight
+        ,totalWeight, next, idxOfVeryFrontTruck, time;
 
     public BridgeQueue(int[] truckWeights, int bridgeLength, int maxWeight) {
         this.truckWeights = truckWeights;
@@ -28,16 +20,11 @@ class BridgeQueue {
     public int execute() {
         while(idxOfVeryFrontTruck < totalOfTrucks) {
             if(next < totalOfTrucks) add(truckWeights[next]);
-            else moveOfRemainTrucks();
+            else moveForward();
         }
         return time;
     }
-    public void moveOfRemainTrucks() {
-        minusPassingTruck();
-        moveForward();
-    }
     public void add(int truck) {
-        minusPassingTruck();
         moveForward();
         if((totalWeight+truck) > maxWeight) return;
         queue[next] = truck;
@@ -48,10 +35,8 @@ class BridgeQueue {
         if((totalWeight -= queue[idxOfVeryFrontTruck++]) == 0) location = 0;
         else location += sequence[idxOfVeryFrontTruck-1] - sequence[idxOfVeryFrontTruck];
     }
-    private void minusPassingTruck() {
-        if (location == maxLocation) remove();
-    }
     private void moveForward() {
+        if (location == maxLocation) remove();
         if (location < maxLocation) location++;
         time++;
     }
