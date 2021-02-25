@@ -1,8 +1,8 @@
 package queue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class 기능개발_이진호Test {
 
