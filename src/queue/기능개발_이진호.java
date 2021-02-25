@@ -12,9 +12,8 @@ public class 기능개발_이진호 {
     //4 3의경우 앞의기능이 100이되면 같이 배포된다
     // 이때 몇번의 배포를 통해 모두 완료가되는지를 알아내야한다.
     public int[] solution(int[] progresses, int[] speeds) {
-        int[] answer = {};
 
-        int progressesLength = progresses.length;
+
         Queue<Integer> developProcess = new LinkedList<>(); //기능들
         Queue<Integer> speedsProcess = new LinkedList<>(); //기능 시간
 
@@ -22,37 +21,47 @@ public class 기능개발_이진호 {
         Arrays.stream(speeds).forEach(p ->speedsProcess.offer(p));
 
         Queue<Integer> successProcess = new LinkedList<>(); //완료 기능
-        int header = developProcess.peek();
 
-        int[] datas = new int[progressesLength];
 
-        int head_count =1000;
-        int index =-1;
-        do {
-            int count =1;
-            int develop = developProcess.poll();
-            int speed = speedsProcess.poll();
-            while(develop <100)
+
+        while( ! developProcess.isEmpty())
+        {
+            if(developProcess.peek() >=100)
             {
-                develop+=speed;
-                count++;
-            }
+                int count =0;
+                do
+                {
+                    count++;
+                    //작업이 100이라면 큐에서 뽑아낸다.
+                    developProcess.poll();
+                    speedsProcess.poll();
 
-            if(head_count > count)//앞의 작업보다 카운팅이 작다면 같이 완성된다.
-            {
-                index--;
+                }while ((! developProcess.isEmpty()) && developProcess.peek() >=100);
+                successProcess.offer(count); //작업 완료된 개수
             }
             else
             {
-                head_count = count; //해드 변경
+                int size = developProcess.size();
+                for(int index = 0 ; index<size;index++)
+                {
+                    int develop = developProcess.poll();
+                    int speed = speedsProcess.poll();
+                    develop +=speed;
+                    developProcess.offer(develop);
+                    speedsProcess.offer(speed);
+                }
             }
-            datas[index]=count;
-            index++;
-
-        }while ( ! developProcess.isEmpty());
+        }
+        int size = successProcess.size();
+        int[] answer = new int[size];
+        for(int index = 0 ; index<size;index++)
+        {
+            answer[index] = successProcess.poll();
+        }
 
         return answer;
     }
+
 }
 
-//7 3 9
+
