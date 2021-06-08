@@ -1,5 +1,6 @@
 package heap;
 
+import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class 디스크컨트롤러_권영찬 {
@@ -21,87 +22,33 @@ public class 디스크컨트롤러_권영찬 {
 
         quickSort(jobs);
 
-        PriorityQueue<Job> queue = new PriorityQueue<>((o1, o2) -> {
-            if(o1.startTime < o2.startTime) {
-                return Integer.compare(o2.jobTime, o1.jobTime);
-            } else if(o1.startTime > o2.startTime) {
-                return -1;
-            } else {
-                return 0;
-            }
-        });
-
-        PriorityQueue<Job> subQueue = new PriorityQueue<>((o1, o2) -> Integer.compare(o2.jobTime, o1.jobTime));
+        PriorityQueue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o[1]));
 
         int completedJobs = 0;
         int msTime = 0;
-        int startNow = 0;
+        int startJobIdx = 0;
         int sumElapsedTime = 0;
-        do {
 
-            // 시간에 해당하는 작업을 작업 서브 큐에 add
-            while(startNow < jobs.length && jobs[startNow][0] == msTime) {
-                int requestedTime = jobs[startNow][0];
-                subQueue.add(new Job(requestedTime, jobs[startNow][1]));
-                startNow++;
+        while(completedJobs < jobs.length) {
+            while(startJobIdx < jobs.length && jobs[startJobIdx][0] <= msTime) {
+                queue.add(jobs[startJobIdx++]);
             }
-            // job time 순서대로 메인 큐에 add
-            int time = 0;
-            while(subQueue.size() > 0) {
-                final Job job = subQueue.poll().setStartTime(time++);
-                queue.add(job);
-            }
-            if(queue.size() > 0) {
-                if(queue.peek().isFinish(msTime)) {
-                    completedJobs++;
-                    sumElapsedTime += queue.poll().getElapsedTime();
-                }
-            }
-            msTime++;
 
-        } while(completedJobs < jobs.length && queue.size() > 0);
+            if(!queue.isEmpty()) {
+                final int[] poll = queue.poll();
+                msTime += poll[1];
+                sumElapsedTime += msTime - poll[0];
+                completedJobs++;
+            } else {
+                msTime = jobs[startJobIdx][0];
+            }
+        }
 
         return sumElapsedTime / completedJobs;
     }
 
-    static class Job {
-
-        private final int requestedTime;
-        private int startTime;
-        private final int jobTime;
-
-        public Job(int requestedTime, int jobTime) {
-            this.requestedTime = requestedTime;
-            this.jobTime = jobTime;
-        }
-
-        public Job setStartTime(int time) {
-            this.startTime = requestedTime + (time * jobTime);
-            return this;
-        }
-
-        public int getStartTime() {
-            return startTime;
-        }
-
-        public int getJobTime() {
-            return jobTime;
-        }
-
-        public boolean isFinish(int now) {
-            return now - (startTime + jobTime) == 0;
-        }
-
-        public int getElapsedTime() {
-            return (startTime + jobTime) - requestedTime;
-        }
-    }
 
     public static void quickSort(int[][] arr) {
-        sort(arr, 0, arr.length - 1);
-    }
-
-    public static void quickSort(int[] arr) {
         sort(arr, 0, arr.length - 1);
     }
 
@@ -125,6 +72,10 @@ public class 디스크컨트롤러_권영찬 {
             }
         }
         return low;
+    }
+
+    public static void quickSort(int[] arr) {
+        sort(arr, 0, arr.length - 1);
     }
 
     public static void swap(int[][] arr, int i, int j) {
