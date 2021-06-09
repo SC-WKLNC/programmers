@@ -3,6 +3,7 @@ package search.dfs_bfs;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 public class 단어변환_권영찬 {
 
@@ -10,13 +11,16 @@ public class 단어변환_권영찬 {
 
         int answer = 0;
 
-        Graph graph = new Graph(words);
+        Graph graph = new Graph(words,target);
         for (int i = 0; i < words.length; i++) {
             for (int j = i; j < words.length; j++) {
                 // TODO begin 처리 해야함
                 if(compare(words[i], words[j])) {
                     graph.addEdge(words[i], words[j]);
                 }
+            }
+            if(compare(begin, words[i])) {
+                graph.addEdge(begin, words[i]);
             }
         }
 
@@ -37,13 +41,35 @@ public class 단어변환_권영찬 {
 
     static class Graph {
 
+        String target;
         Map<String, Node> nodes;
 
-        Graph(String[] words) {
-            nodes = new HashMap<>((int)(words.length * 1.5));
+        Graph(String[] words, String target) {
+            this.target = target;
+            this.nodes = new HashMap<>((int)(words.length * 1.5));
             for (String s : words) {
                 nodes.put(s, new Node(s));
             }
+        }
+
+        int bfs(String begin) {
+            Node root = nodes.get(begin);
+            Queue<Node> queue = new LinkedList<>();
+            queue.add(root);
+            root.marked = true;
+            while(!queue.isEmpty()) {
+                Node r = queue.poll();
+                if(r.id.equals(target)) {
+
+                }
+                for(Node n : r.adjacent) {
+                    if(!n.marked) {
+                        n.marked = true;
+                        queue.add(n);
+                    }
+                }
+            }
+            return 0; // TODO 각 노드에 데이터를 증가시켜 target 과 일치하는 가장 작은 노드의 값을 리턴
         }
 
         void addEdge(String s1, String s2) {
