@@ -12,7 +12,7 @@ public class YC {
         return userReportList.getSendMailCountList(id_list, k);
     }
 
-    public static class UserReport {
+    public static class UserReport { // 유저 신고 객체
 
         private final String[] report;
         private final UserList users;
@@ -32,7 +32,7 @@ public class YC {
 
     }
 
-    public static class UserList {
+    public static class UserList { // 유저 신고 일급 컬렉션
 
         private final Map<String, User> users;
 
@@ -40,7 +40,7 @@ public class YC {
             this.users = new HashMap<>();
         }
 
-        public void report(final String[] report) {
+        public void report(final String[] report) { // 신고
             if(users.isEmpty()) {
                 Arrays.stream(report).forEach(this::addReport);
             }
@@ -48,16 +48,16 @@ public class YC {
 
         public void addReport(final String reportInfo) {
             final String[] reportUserInfoList = reportInfo.split(" ");
-            final User user = addUserAndGet(reportUserInfoList[0]);
-            final User targetUser = addUserAndGet(reportUserInfoList[1]);
-            user.reportUser(targetUser);
+            final User user = addUserAndGet(reportUserInfoList[0]);         // 신고한 유저
+            final User targetUser = addUserAndGet(reportUserInfoList[1]);   // 신고된 유저
+            user.reportUser(targetUser); // 유저를 신고
         }
 
         private User addUserAndGet(final String userName) {
             return users.computeIfAbsent(userName, User::new);
         }
 
-        public int[] getSendMailCountList(final String[] idList, final int k) {
+        public int[] getSendMailCountList(final String[] idList, final int k) { // 각 유저의 신고한 유저 일급 컬렉션에서 K 이상 신고된 유저의 갯수 카운팅
             return Arrays.stream(idList)
                 .mapToInt(id -> users.getOrDefault(id, User.getDefault()).getSendMailCount(k))
                 .toArray();
@@ -65,11 +65,11 @@ public class YC {
 
     }
 
-    public static class User {
+    public static class User { // 유저 객체
 
-        private final String name;
-        private final ReportTargetUsers targetUsers;
-        private int reportCount;
+        private final String name;                   // 유저 이름
+        private final ReportTargetUsers targetUsers; // 신고한 유저 일급 컬렉션 (One To Many : ReportTargetUser)
+        private int reportCount;                     // 신고 당한 횟수
 
         public User(final String name) {
             this.name = name;
@@ -77,7 +77,7 @@ public class YC {
             this.reportCount = 0;
         }
 
-        public static User getDefault() {
+        public static User getDefault() { // default 객체 생성
             return new User("");
         }
 
@@ -85,7 +85,7 @@ public class YC {
             return name;
         }
 
-        public void reported() {
+        public void reported() { // 해당 유저의 신고 당한 횟수 카운트
             reportCount++;
         }
 
@@ -93,7 +93,7 @@ public class YC {
             targetUsers.reportUser(targetUser);
         }
 
-        public Boolean isSuspensionTarget(final int criteriaNum) {
+        public Boolean isSuspensionTarget(final int criteriaNum) { // 해당 유저의 신고된 횟수가 정지 기준 이상인지 확인
             return reportCount >= criteriaNum;
         }
 
@@ -103,7 +103,7 @@ public class YC {
 
     }
 
-    public static class ReportTargetUsers {
+    public static class ReportTargetUsers { // 신고한 유저 일급 컬렉션 (Many To One : User)
 
         private final Map<String, User> targetUsers;
 
@@ -112,13 +112,13 @@ public class YC {
         }
 
         public void reportUser(final User targetUser) {
-            if(!targetUsers.containsKey(targetUser.getName())) {
+            if(!targetUsers.containsKey(targetUser.getName())) { // 이미 신고한 유저인지 확인하고 map 에 추가후 신고처리
                 targetUsers.put(targetUser.getName(), targetUser);
                 targetUser.reported();
             }
         }
 
-        public int getSendMailCount(int k) {
+        public int getSendMailCount(int k) { // 신고한 유저 리스트 중 정지 기준 횟수 이상 신고받은 유저의 갯수 카운팅 (메일 전송 갯수)
             return (int) targetUsers.values().stream()
                 .filter(targetUser -> targetUser.isSuspensionTarget(k))
                 .count();
