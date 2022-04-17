@@ -1,4 +1,4 @@
-package 신고결과받기;
+package Lv1.신고_결과_받기;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;

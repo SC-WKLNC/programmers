@@ -1,4 +1,4 @@
-package 로또_최고순위_최저순위;
+package Lv1.로또의_최고_순위와_최저_순위;
 
 import java.util.ArrayList;
 import java.util.Arrays;
