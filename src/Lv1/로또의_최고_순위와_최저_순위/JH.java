@@ -24,18 +24,11 @@ public class JH {
             int winCount = 0;
             //당첨 횟수를 찾는다.
             for(int lotto : lottos){
-                for(int win_num : win_nums){
-                    if(lotto == win_num) {
-                        winCount ++;
-                        break;
-                    }
-                }
+                winCount += (int) Arrays.stream(win_nums).filter(win_num -> win_num == lotto).count();
+
             }
             //0의 개수를 찾는다.
-            int luckyCount = 0;
-            for(int lotto : lottos){
-                if(lotto == 0) luckyCount ++;
-            }
+            int luckyCount = (int)Arrays.stream(lottos).filter(lotto -> lotto == 0).count();
 
             int minRanking = ranking(winCount);
             int maxRanking = ranking(winCount + luckyCount);
