@@ -21,9 +21,9 @@ public class JH {
         public int[] solution(String[] id_list, String[] report, int k) {
 
             int badReportLimit = k;
-            //해당 유저의 신고한 유저의 리스트
+            //해당 유저를 신고한 유저의 리스트  신고대상자 + 신고자 리스트
             Map<String, Set<String>> userBadReport = new HashMap<>();
-            //해당 유저가 받을 메일 카운트
+            //해당 유저가 받을 메일 카운트 신고자 + 메일 수
             Map<String, Integer> userMail = new HashMap<>();
 
             //init
