@@ -31,10 +31,9 @@ public class YC {
                 || id.isEmpty();
         }
 
-        public Boolean validate() { // 아이디 유효성 검증
-            return checkSize()      // 길이 확인
-                && checkStr()       // 허용된 문자 확인
-                && checkPeriod();   // 마침표 확인
+        // 아이디 유효성 검증 (길이 확인, 허용된 문자 확인, 마침표 확인)
+        public Boolean validate() {
+            return checkSize() && checkStr() && checkPeriod();
         }
 
         private Boolean checkSize() {
@@ -42,9 +41,7 @@ public class YC {
         }
 
         private Boolean checkStr() {
-            return isSmallLetter()
-                || isDigit()
-                || isSpecialChar();
+            return isSmallLetter() || isDigit() || isSpecialChar();
         }
 
         private Boolean isSmallLetter() {
@@ -88,28 +85,41 @@ public class YC {
     public static class IdRecommender { // 추천 아이디 생성기
 
         private final String id;
+        private String result;
 
         public IdRecommender(final String id) {
             this.id = id;
+            result = id;
         }
 
         public String getRecommendedId() {
-            String replaceId = id.toLowerCase();                                        // 1단계 소문자 치환
-            replaceId = replaceId.replaceAll("[^0-9a-z._-]", "");   // 2단계 비허용 문자 제거
-            replaceId = replaceId.replaceAll("\\.{2,}", ".");       // 3단계 연속 마침표 1개로 치환
-            replaceId = replaceId.replaceAll("^\\.|\\.$", "");      // 4단계 처음, 끝 마침표 제거
-            if(replaceId.isEmpty())                                                     // 5단계 문자열이 비었을 경우 'a' 로 치환
-                replaceId = "a";
-            if(replaceId.length() > 15)                                                 // 6단계 15개의 문자를 제외한 나머지 문자 제거
-                replaceId = replaceId.substring(0, 15);
-            if(replaceId.charAt(replaceId.length()-1) == '.')                           // 제거 후 처음, 끝 마침표 제거
-                replaceId = replaceId.substring(0, replaceId.length()-1);
-            if(replaceId.length() <= 2) {                                               // 7단계 문자열 길이가 2자 이하인 경우 길이가 3이 될때까지 문자 추가
+            stepOne();      // 1단계 소문자 치환
+            stepTwo();      // 2단계 비허용 문자 제거
+            stepThree();    // 3단계 연속 마침표 1개로 치환
+            stepFour();     // 4단계 처음, 끝 마침표 제거
+            stepFive();     // 5단계 문자열이 비었을 경우 'a' 로 치환
+            stepSix();      // 6단계 15개의 문자를 제외한 나머지 문자 제거 // 제거 후 처음, 끝 마침표 제거
+            stepSeven();    // 7단계 문자열 길이가 2자 이하인 경우 길이가 3이 될때까지 문자 추가
+            return result;
+        }
+
+        private void stepOne() { result = id.toLowerCase(); }
+        private void stepTwo() { result = result.replaceAll("[^0-9a-z._-]", ""); }
+        private void stepThree() { result = result.replaceAll("\\.{2,}", "."); }
+        private void stepFour() { result = result.replaceAll("^\\.|\\.$", ""); }
+        private void stepFive() { if(result.isEmpty()) result = "a"; }
+        private void stepSix() {
+            if(result.length() > IdChecker.MAX_SIZE)
+                result = result.substring(0, IdChecker.MAX_SIZE);
+            if(result.charAt(result.length()-1) == '.')
+                result = result.substring(0, result.length()-1);
+        }
+        private void stepSeven() {
+            if(result.length() <= 2) {
                 do {
-                    replaceId += String.valueOf(replaceId.charAt(replaceId.length() - 1));
-                } while (replaceId.length() != 3);
+                    result += String.valueOf(result.charAt(result.length() - 1));
+                } while (result.length() != 3);
             }
-            return replaceId;
         }
 
     }
