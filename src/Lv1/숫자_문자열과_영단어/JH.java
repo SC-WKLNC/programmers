@@ -11,52 +11,62 @@ import java.util.*;
  */
 public class JH {
     public static void main(String[] args) {
-        String text = "one4seveneight";
-        String text1 = "23four5six7";
+        String text1 = "one4seveneight";
+        String text2 = "23four5six7";
+        String text3 = "2three45sixseven";
         Solution solution = new Solution();
-        solution.solution(text);
+        solution.solution(text3);
 
-        //solution.test(text1);
 
     }
 
 
     static class Solution {
 
+
         public int solution(String s) {
             int answer = 0;
+            String text = s;
+            Queue<Integer> queue = new LinkedList<>();
+
             String result = "";
-            char[] chars = s.toCharArray();
-            int charStrIndex = -1;
+            char[] chars = text.toCharArray();
 
+            //숫자의 위치 찾기
             for(int i = 0 ; i <chars.length ; i++){
-                //해당 문자가 0~9 가 아니면서 마지막 문자가 아닐때
-                if(!(chars[i] >= '0' && chars[i] <= '9')) {
-                    if(charStrIndex == -1 ) charStrIndex = i;
-                    if(i < chars.length -1)  continue;
-                    
-
+                if(chars[i] >= '0' && chars[i] <= '9'){
+                    queue.add(i);
                 }
+            }
+
+            //시작이 숫자가 아닐 경우
+            if(queue.peek() != 0){
+                int first = queue.peek();
+                String substring = text.substring(0, first);
+                result += conNumberChar(substring);
+            }
 
 
-                if(charStrIndex != -1){
-                    int startIndex = charStrIndex;
-                    int endIndex = i;
-                    String substring = s.substring(startIndex, endIndex);
-                    String s1 = conNumberChar(substring);
+            while (!queue.isEmpty()){
+                int first = queue.poll();
+                int second = queue.peek() == null ? text.length() : queue.peek(); //null 이라면 마지막 까지 자르기
 
-                    System.out.println("문자 추가 = " + s1);
-                    result += s1;
-                    charStrIndex = -1;
-                }
+                System.out.println("first = " + first);
+                System.out.println("second = " + second);
+                result += chars[first]; //숫자는 바로 넣는다.
+                System.out.println("result = " + result);
 
-                System.out.println("숫자추가 = " + chars[i]);
-                result += chars[i];
+                String substring = text.substring(first+1, second);
+                System.out.println("substring = " + substring);
+                if(substring.isEmpty()) continue; //잘랐는데 아무것도 없다면 패스
+
+                result += conNumberChar(substring);
 
 
             }
 
-            System.out.println("결과 = " + result);
+            System.out.println("result = " + result);
+
             return answer;
         }
 
@@ -78,14 +88,12 @@ public class JH {
             numberKeys.add("nine");
 
             String result = "";
-            System.out.println("number = " + inputNumber);
+
             while(!inputNumber.isEmpty()){
 
                 for(int i = 0; i<numberKeys.size() ; i++){
                     if(inputNumber.startsWith(numberKeys.get(i))){
-                        System.out.println("제거전 = " + inputNumber);
                         inputNumber = inputNumber.replace(numberKeys.get(i), "");
-                        System.out.println("제거후 = " + inputNumber);
 
                         result += i;
                         break;
@@ -102,63 +110,5 @@ public class JH {
 
 
     }
-    static class NumberCollection{
-        final List<Integer> numberPositions;
-        //final Pair charPositions;
 
-        public NumberCollection(String text) {
-            numberPositions = new ArrayList<>();
-
-            char[] chars = text.toCharArray();
-            for(int i = 0 ; i <chars.length ; i++){
-                if(chars[i] >= '0' && chars[i] <= '9'){
-                    System.out.println("i = " + i);
-                    numberPositions.add(i);
-                }
-            }
-
-            for(int i = 0 ; i < numberPositions.size()-1 ; i++){
-                int startIndex = numberPositions.get(i)+1; //해당 위치는 숫자를 가리키고있기때문에 +1 을 하여 다음 문자부터 시작한다.
-                int endIndex = numberPositions.get(i + 1);
-
-                String substring = text.substring(startIndex, endIndex);
-                System.out.println("substring = " + substring);
-            }
-
-
-        }
-
-    }
-//switch (number){
-//        case "zero" :
-//            return 0;
-//        case "one" :
-//            return 1;
-//        case "two" :
-//            return 2;
-//        case "three" :
-//            return 3;
-//        case "four" :
-//            return 4;
-//        case "five" :
-//            return 5;
-//        case "six" :
-//            return 6;
-//        case "seven" :
-//            return 7;
-//        case "eight" :
-//            return 8;
-//        case "nine" :
-//            return 9;
-//    }
-//            return 0;
-    static class Pair<L,R>{
-        final L first;
-        final R second;
-
-        public Pair(L first, R second) {
-            this.first = first;
-            this.second = second;
-        }
-    }
 }
