@@ -2,80 +2,13 @@ package Lv1.숫자_문자열과_영단어;
 
 import java.util.*;
 
-/*
-"one4seveneight"	1478
-"23four5six7"	234567
-"2three45sixseven"	234567
-"123"	123
-
- */
 public class JH {
-    public static void main(String[] args) {
-        String text1 = "one4seveneight";
-        String text2 = "23four5six7";
-        String text3 = "2three45sixseven";
-        Solution solution = new Solution();
-        solution.solution(text3);
-
-
-    }
-
 
     static class Solution {
 
-
-        public int solution(String s) {
-            int answer = 0;
-            String text = s;
-            Queue<Integer> queue = new LinkedList<>();
-
-            String result = "";
-            char[] chars = text.toCharArray();
-
-            //숫자의 위치 찾기
-            for(int i = 0 ; i <chars.length ; i++){
-                if(chars[i] >= '0' && chars[i] <= '9'){
-                    queue.add(i);
-                }
-            }
-
-            //시작이 숫자가 아닐 경우
-            if(queue.peek() != 0){
-                int first = queue.peek();
-                String substring = text.substring(0, first);
-                result += conNumberChar(substring);
-            }
-
-
-            while (!queue.isEmpty()){
-                int first = queue.poll();
-                int second = queue.peek() == null ? text.length() : queue.peek(); //null 이라면 마지막 까지 자르기
-
-                System.out.println("first = " + first);
-                System.out.println("second = " + second);
-                result += chars[first]; //숫자는 바로 넣는다.
-                System.out.println("result = " + result);
-
-                String substring = text.substring(first+1, second);
-                System.out.println("substring = " + substring);
-                if(substring.isEmpty()) continue; //잘랐는데 아무것도 없다면 패스
-
-                result += conNumberChar(substring);
-
-
-            }
-
-            System.out.println("result = " + result);
-
-            return answer;
-        }
-
-
-        private String conNumberChar(String number){
-
-            String inputNumber  = number.toLowerCase();
-
-            List<String> numberKeys = new ArrayList<>();
+        List<String> numberKeys;
+        public Solution(){
+            numberKeys= new ArrayList<>();
             numberKeys.add("zero");
             numberKeys.add("one");
             numberKeys.add("two");
@@ -86,24 +19,42 @@ public class JH {
             numberKeys.add("seven");
             numberKeys.add("eight");
             numberKeys.add("nine");
+        }
 
+
+        public int solution(String s) {
+
+            String text = s;
+
+            return Integer.parseInt(conversionNumber(text));
+        }
+
+
+        private String conversionNumber(String number){
+
+            String inputNumber  = number.toLowerCase();
             String result = "";
 
             while(!inputNumber.isEmpty()){
+                char startChar = inputNumber.toCharArray()[0];
+                //첫번째 문자가 숫자 라면 그냥 넣는다.
+                if(startChar >= '0' && startChar <= '9'){
+                    result += startChar;
+                    inputNumber = inputNumber.substring(1);
+                    continue;
+                }
 
                 for(int i = 0; i<numberKeys.size() ; i++){
+                    //문자가 하나가 아닌 여러개가 같이 올수도있기때문에 변환한 문자는 제거하고 반복한다.
                     if(inputNumber.startsWith(numberKeys.get(i))){
-                        inputNumber = inputNumber.replace(numberKeys.get(i), "");
-
+                        inputNumber = inputNumber.substring(numberKeys.get(i).length());
                         result += i;
                         break;
                     }
                 }
             }
 
-          return result;
-
-
+            return result;
 
 
         }
