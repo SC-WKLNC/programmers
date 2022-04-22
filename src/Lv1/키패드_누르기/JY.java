@@ -86,45 +86,45 @@ public class JY {
         public String moveHand(final int[] _number)
         {
             // left , right 위치값일때
-            if (_number[1]==0) return vaildHandSector("L",_number);
-            if (_number[1]==2) return vaildHandSector("R",_number);
+            if (_number[1]==0) return moveLeftNRightHandSector("L",_number);
+            if (_number[1]==2) return moveLeftNRightHandSector("R",_number);
             // center 위치값일때
-            return vaildCenterHandSector(_number);
+            return moveCenterHandSector(_number);
         }
 
-        private String vaildHandSector(final String _hand,final int[] _leftNrightNum)
+        private String moveLeftNRightHandSector(final String _hand, final int[] _moveNum)
         {
-            return initHandSector(_hand,_leftNrightNum);
+            return initHandSector(_hand,_moveNum);
         }
-        private String initHandSector(final String _sector, final int[] _num)
+        private String initHandSector(final String _sector, final int[] _moveNum)
         {
             // secter L , R 일때 현재의 위치를 기록함
             switch (_sector)
             {
                 case "L":
-                    lastLeftHandSecter =_num;
+                    lastLeftHandSecter =_moveNum;
                     break;
                 case "R" :
-                    lastRightHandSecter = _num;
+                    lastRightHandSecter = _moveNum;
                     break;
                 default:
                     break;
             }
             return _sector;
         }
-        private String vaildCenterHandSector(final int[] _centerNum)
+        private String moveCenterHandSector(final int[] _moveNum)
         {
             // 값초기화
             int leftLenth = 0;
             int rightLenth = 0;
             // left, right 를 현재 중앙값을 계산후에 abs로 저장함.
-            leftLenth = absCalcLengtth(lastLeftHandSecter,_centerNum);
-            rightLenth = absCalcLengtth(lastRightHandSecter,_centerNum);
+            leftLenth = absCalcLengtth(lastLeftHandSecter,_moveNum);
+            rightLenth = absCalcLengtth(lastRightHandSecter,_moveNum);
             // 두값이 같으면 자신의 손잡이 (hand)로 값을 입력
-            if(leftLenth == rightLenth)return initHandSector(hand,_centerNum);
+            if(leftLenth == rightLenth)return initHandSector(hand,_moveNum);
             //거리가 가까운 값을 입력
-            if(leftLenth>rightLenth) return initHandSector("R",_centerNum);
-            return initHandSector("L",_centerNum);
+            if(leftLenth>rightLenth) return initHandSector("R",_moveNum);
+            return initHandSector("L",_moveNum);
         }
 
         private int absCalcLengtth(final int[] _baseArray , final int[] _targetArray)
