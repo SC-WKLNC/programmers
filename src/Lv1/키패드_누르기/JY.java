@@ -17,7 +17,7 @@ public class JY {
             // call result Value
             return module.resultValue(numbers);
         }
-        public void initKeypad()
+        private void initKeypad()
         {
             // 하기 위치에 맞춰 위치 셋업
             // 0,0(1)  0,1(2)  0,2(3)
@@ -41,8 +41,7 @@ public class JY {
 
         private final HashMap<Integer,int[]> keypad;
         private final String hand;
-        private StringBuilder stringBuilder =new StringBuilder();
-        private MoveHandController moveHandController;
+        private final MoveHandController moveHandController;
         public ConvertModule(final HashMap<Integer,int[]> _keypad,final String _hand)
         {
             this.keypad = _keypad;
@@ -52,29 +51,30 @@ public class JY {
             this.moveHandController = new MoveHandController(hand);
         }
 
-        public String resultValue(final int[] numbers)
+        public String resultValue(final int[] _numbers)
         {
             //result는 오직 string 만
-            return addpendString(numbers);
+            return addpendString(_numbers).toString();
         }
-        private String addpendString(final int[] _numbers)
+        private StringBuilder addpendString(final int[] _numbers)
         {
+            StringBuilder stringBuilder = new StringBuilder();
             //addpend는 addpend 값을 받아서 addpend만
             for (int number:_numbers) {
                 stringBuilder.append(moveHandController.moveHand(keypad.get(number)));
             }
-            return stringBuilder.toString();
+            return stringBuilder;
         }
     }
 
     class MoveHandController
     {
 
-        protected int[] lastLeftHandSecter;
+        private int[] lastLeftHandSecter;
         private int[] lastRightHandSecter;
-        final String hand;
+        private final String hand;
 
-        public MoveHandController(String _hand)
+        public MoveHandController(final String _hand)
         {
             this.hand = _hand;
             // left hand 초기값
@@ -85,18 +85,16 @@ public class JY {
 
         public String moveHand(final int[] _number)
         {
-            // left , right 위치값만 찾기
-            if (_number[1]==0 || _number[1] ==2) return vaildHandSector(_number);
+            // left , right 위치값일때
+            if (_number[1]==0) return vaildHandSector("L",_number);
+            if (_number[1]==2) return vaildHandSector("R",_number);
             // center 위치값일때
             return vaildCenterHandSector(_number);
         }
 
-        private String vaildHandSector(final int[] leftNrightNum)
+        private String vaildHandSector(final String _hand,final int[] _leftNrightNum)
         {
-            // left 일때만.
-            if(leftNrightNum[1]==0) return initHandSector("L",leftNrightNum);
-            // right 일때만.
-            return initHandSector("R",leftNrightNum);
+            return initHandSector(_hand,_leftNrightNum);
         }
         private String initHandSector(final String _sector, final int[] _num)
         {
@@ -114,19 +112,24 @@ public class JY {
             }
             return _sector;
         }
-        private String vaildCenterHandSector(final int[] centerNum)
+        private String vaildCenterHandSector(final int[] _centerNum)
         {
             // 값초기화
             int leftLenth = 0;
             int rightLenth = 0;
             // left, right 를 현재 중앙값을 계산후에 abs로 저장함.
-            leftLenth = Math.abs(lastLeftHandSecter[0] - centerNum[0])+Math.abs(lastLeftHandSecter[1] - centerNum[1]);
-            rightLenth = Math.abs(lastRightHandSecter[0] - centerNum[0])+Math.abs(lastRightHandSecter[1] - centerNum[1]);
+            leftLenth = absCalcLengtth(lastLeftHandSecter,_centerNum);
+            rightLenth = absCalcLengtth(lastRightHandSecter,_centerNum);
             // 두값이 같으면 자신의 손잡이 (hand)로 값을 입력
-            if(leftLenth == rightLenth)return initHandSector(hand,centerNum);
+            if(leftLenth == rightLenth)return initHandSector(hand,_centerNum);
             //거리가 가까운 값을 입력
-            if(leftLenth>rightLenth) return initHandSector("R",centerNum);
-            return initHandSector("L",centerNum);
+            if(leftLenth>rightLenth) return initHandSector("R",_centerNum);
+            return initHandSector("L",_centerNum);
+        }
+
+        private int absCalcLengtth(final int[] _baseArray , final int[] _targetArray)
+        {
+            return (Math.abs(_baseArray[0] - _targetArray[0]) + Math.abs(_baseArray[1] - _targetArray[1]));
         }
     }
 }
