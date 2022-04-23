@@ -15,15 +15,15 @@ public class JH {
     static class Solution {
         public String solution(int[] numbers, String hand) {
 
-            String answer = "";
-            HandKeyPad handKeyPad = new HandKeyPad(hand);
-
+            KeyBoard keyBoard = new KeyBoard();
+            HandKeyPad handKeyPad = new HandKeyPad(hand,keyBoard);
+            StringBuilder stringBuilder = new StringBuilder();
             for (int number : numbers) {
-                answer +=handKeyPad.click(number);
+                stringBuilder.append( handKeyPad.click(number));
             }
 
 
-            return answer;
+            return stringBuilder.toString();
         }
     }
 
@@ -34,8 +34,8 @@ public class JH {
         private Pair rightHandPos;
 
         private KeyBoard keyBoard;
-        public HandKeyPad(String hand){
-            this.keyBoard = new KeyBoard();
+        public HandKeyPad(String hand, KeyBoard keyBoard){
+            this.keyBoard = keyBoard;
             this.hand = hand;
             this.leftHandPos = keyBoard.getKeyBoardPos("*");
             this.rightHandPos = keyBoard.getKeyBoardPos("#");

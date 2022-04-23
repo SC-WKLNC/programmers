@@ -39,6 +39,7 @@ public class JH {
         public Game(int[][] board){
             this.board = board;
             this.basket = new Stack<>();
+          
         }
         //크레인을 작동 시킨다.
         public void action(int move){
