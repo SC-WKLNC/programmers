@@ -40,19 +40,26 @@ public class JH {
             this.leftHandPos = keyBoard.getKeyBoardPos("*");
             this.rightHandPos = keyBoard.getKeyBoardPos("#");
         }
+        private String result(String hand, Pair keyPos){
 
+            if(hand.equals("L") || hand.equals("left")){
+                leftHandPos = keyPos;
+            }else{
+                rightHandPos = keyPos;
+            }
+
+            return hand;
+        }
         public String click(int number){
             Pair keyBoardPos = keyBoard.getKeyBoardPos(String.valueOf(number));
 
             //왼쪽 키패드인경우
             if(number == 1 || number == 4 || number == 7){
-                leftHandPos = keyBoardPos;
-                return "L";
+                return result("L",keyBoardPos);
             }
             //오른쪽 키패드 인경우
             else if(number == 3 || number == 6 || number == 9){
-                rightHandPos = keyBoardPos;
-                return "R";
+                return result("R",keyBoardPos);
             }
 
             //가운데 인경우 가까운 손이 누른다
@@ -60,24 +67,11 @@ public class JH {
             int rightRange =  Math.abs((rightHandPos.getX() - keyBoardPos.getX())) + Math.abs((rightHandPos.getY() - keyBoardPos.getY()));
 
             if(leftRange == rightRange){
-                if(hand.equals("left")){
-                    leftHandPos = keyBoardPos;
-                    return "L";
-                }
-                rightHandPos = keyBoardPos;
-                return "R";
+                return result(hand, keyBoardPos);
             }
 
-            if(leftRange < rightRange){
-                leftHandPos = keyBoardPos;
-                return "L";
-            }
-            if(rightRange < leftRange){
-                rightHandPos = keyBoardPos;
-                return "R";
-            }
+            return result(leftRange < rightRange ?"L":"R", keyBoardPos);
 
-            return "NO";
         }
     }
 
