@@ -42,9 +42,12 @@ public class JH {
         }
         private String result(String hand, Pair keyPos){
 
+
             if(hand.equals("L") || hand.equals("left")){
+                hand = "L";
                 leftHandPos = keyPos;
             }else{
+                hand = "R";
                 rightHandPos = keyPos;
             }
 

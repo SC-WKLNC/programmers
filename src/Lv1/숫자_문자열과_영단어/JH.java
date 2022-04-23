@@ -37,6 +37,7 @@ public class JH {
 
             while(!inputNumber.isEmpty()){
                 char startChar = inputNumber.toCharArray()[0];
+
                 //첫번째 문자가 숫자 라면 그냥 넣는다.
                 if(startChar >= '0' && startChar <= '9'){
                     result += startChar;
