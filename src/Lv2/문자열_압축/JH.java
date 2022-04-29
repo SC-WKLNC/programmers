@@ -14,15 +14,25 @@ public class JH {
         //String s = "aabbaccc";
         //String s = "ababcdcdababcdcd";
         //String s = "abcabcabcabc3dede";
-        String s = "abcabcabcabcdededededede";
+        String s = "abcabcdede";
         JH jh = new JH();
         jh.solution(s);
     }
     public int solution(String s) {
-        int answer = 0;
+        int originTextSize = s.length();
+        int answer = originTextSize;
 
         Compressor compressor = new Compressor(s);
-        int optimumValue = compressor.getOptimumSize();
+
+
+        for (int i = 1; i <= s.length(); i++) {
+            compressor.setCompressorValue(i);
+            String optimumValue = compressor.execute();
+
+
+            if(optimumValue.length() < answer) answer = optimumValue.length();
+            if(i >= originTextSize/2) break;
+        }
 
         return answer;
     }
@@ -30,51 +40,58 @@ public class JH {
 
     class Compressor{
 
-        private String originalText;
         private char[] originalTextChars;
-        private int maxCompressorSize;
-
+        private int compressorValue = 1;
         public Compressor(String originalText){
-            this.originalText = originalText;
             this.originalTextChars = originalText.toCharArray();
-            this.maxCompressorSize = originalText.length()/2;
         }
 
-        //최적의 압축 길이를 리턴한다.
-        public int getOptimumSize(){
+        public void setCompressorValue(int compressorValue) {
+            this.compressorValue = compressorValue;
+        }
 
-            //1 부터 압축 비율을 반복한다.
-            for (int i = 1; i <= maxCompressorSize; i++) {
-                //나누어 떨어지지 않는 압축 비율은 무시한다.
-                if(maxCompressorSize%i != 0) continue;
-                //압축률 만큼 문자를 뺸다.
-                Queue<String> originalQueue = getOriginalQueue(i);
+        public String execute(){
 
+            StringBuilder builder = new StringBuilder();
+
+            Queue<String> originalQueue = getOriginalQueue(compressorValue);
+
+            while( ! originalQueue.isEmpty()){
+                builder.append(getOptimumQueue(originalQueue));
             }
 
+            return builder.toString();
+        }
+        //앞의 중복을 제거하고 몇번을 제거했는지 반환한다.
+        private String getOptimumQueue(Queue<String> queue){
+            int result = 0;
 
+            String target = queue.poll();
 
-            //뒷문자가 꺼낸 문자와 같다면 또 뺀다.
+            while(target.equals(queue.peek())){
+                if(result == 0) result = 1;
+                queue.poll();
+                result++;
+            }
 
-            return 0;
+            return result == 0 ? target : result+target;
         }
 
         //전제 문자를 길이만큼 짤라서 큐에 넣는다.
         private Queue<String> getOriginalQueue(int compressorSize){
             Queue<String> queue = new LinkedList<>();
             int forSize = originalTextChars.length;
-            System.out.print(">>>>> ");
 
             for (int i = 0; i < forSize; i+=compressorSize) {
 
                 String str = "";
                 for(int j = i; j < (i+compressorSize); j++){
+                    if(j >= originalTextChars.length) break;
+
                     str += originalTextChars[j];
                 }
-                System.out.print("/"+str);
                 queue.add(str);
             }
-            System.out.println("");
             return queue;
         }
 
