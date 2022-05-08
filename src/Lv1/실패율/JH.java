@@ -1,8 +1,6 @@
 package Lv1.실패율;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 /**
@@ -21,45 +19,75 @@ public class JH {
     public int[] solution(int N, int[] stages) {
         int[] answer = {};
 
-        StageCalculator stageCalculator = new StageCalculator(N,stages);
-        for (int stage : stages) {
-            stageCalculator.stageFailureRate(stage);
-        }
+        UserStageMap userStageMap = new UserStageMap(N + 1);
+        Arrays.stream(stages)
+                .forEach(stage ->
+                        userStageMap.addStageUser(stage)
+                );
+
+
+        StageDifficulty stageDifficulty = new StageDifficulty(userStageMap);
+        stageDifficulty.getStageDifficulty();
 
         return answer;
     }
 
-    class StageCalculator{
-        private int max_stage;
-        private int userCount;
-        private UserStageMap userStageMap;
 
-        public StageCalculator(int max_stage, int[] stages) {
-            this.max_stage = max_stage + 1; //max stage +1 이 라스트 스테이지 이다.
-            this.userCount = stages.length+1;
-            this.userStageMap = new UserStageMap();
-            Arrays.stream(stages)
-                    .forEach(stage ->
-                            userStageMap.addStageUser(stage)
-                    );
+    class StageDifficulty{
+        //스테이지 난이도가 키, 해당 난이도를 가지고있는 스테이지가 벨류
+        private Map<Float, List<Integer>> difficultyStage = new HashMap<>();
+
+        //난이도의 키들
+        private Set<Float> difficulty = new HashSet<>();
+
+        public StageDifficulty(UserStageMap userStageMap){
+            int maxStage = userStageMap.getMaxStage();
+            for(int i=1; i <maxStage; i ++){
+                float stageChallengeUser = userStageMap.getStageChallengeUser(i);
+                float stageUser = userStageMap.getStageUser(i);
+
+                float sum = stageUser/stageChallengeUser;
+
+                this.difficulty.add(sum);
+                List<Integer> integers = this.difficultyStage.getOrDefault(sum, new ArrayList<>());
+                integers.add(i);
+                this.difficultyStage.put(sum,integers);
+
+            }
+
         }
-        
-        //스테이지 실패율
-        public void stageFailureRate(int stage){
-            float stageChallengeUser = userStageMap.getStageChallengeUser(stage);
-            float stageUser = userStageMap.getStageUser(stage);
 
-            float sum = stageUser/stageChallengeUser;
-            System.out.println("stage "+stage+" : "+stageUser+"/"+stageChallengeUser + " = "+sum);
+        public void getStageDifficulty(){
 
+            List<Float> keyList = new ArrayList(difficulty);
+            Collections.sort(keyList,Collections.reverseOrder()); //내림차순 정렬
+
+            List<Integer> result = new ArrayList<>();
+            for (Float difficultyKey : keyList) {
+                List<Integer> orDefault = difficultyStage.getOrDefault(difficultyKey, new ArrayList<>());
+                orDefault.stream().sorted();
+                for (Integer integer : orDefault) {
+                    result.add(integer);
+                }
+            }
+            System.out.println("result = " + result);
         }
-
 
     }
 
     class UserStageMap {
-
+        //몇번 스테이지에 몇명 있는지
         private Map<Integer, Integer> userStagePos = new HashMap<>();
+        private int maxStage;
+
+        public UserStageMap(int maxStage){
+            this.maxStage = maxStage;
+        }
+
+        public int getMaxStage() {
+            return maxStage;
+        }
+
 
         public void addStageUser(int stage){
             userStagePos.put(stage, getStageUser(stage) + 1 );
