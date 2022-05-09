@@ -17,8 +17,6 @@ public class JH {
 
     }
     public int[] solution(int N, int[] stages) {
-        int[] answer = {};
-
         UserStageMap userStageMap = new UserStageMap(N + 1);
         Arrays.stream(stages)
                 .forEach(stage ->
@@ -26,8 +24,8 @@ public class JH {
                 );
 
 
-        StageDifficulty stageDifficulty = new StageDifficulty(userStageMap);
-        stageDifficulty.getStageDifficulty();
+
+        int[] answer = new StageDifficulty(userStageMap).getStageDifficulty();
 
         return answer;
     }
@@ -46,7 +44,7 @@ public class JH {
                 float stageChallengeUser = userStageMap.getStageChallengeUser(i);
                 float stageUser = userStageMap.getStageUser(i);
 
-                float sum = stageUser/stageChallengeUser;
+                float sum = stageChallengeUser != 0 ? stageUser/stageChallengeUser : 0;
 
                 this.difficulty.add(sum);
                 List<Integer> integers = this.difficultyStage.getOrDefault(sum, new ArrayList<>());
@@ -57,12 +55,13 @@ public class JH {
 
         }
 
-        public void getStageDifficulty(){
+        public int[] getStageDifficulty(){
 
             List<Float> keyList = new ArrayList(difficulty);
             Collections.sort(keyList,Collections.reverseOrder()); //내림차순 정렬
 
             List<Integer> result = new ArrayList<>();
+
             for (Float difficultyKey : keyList) {
                 List<Integer> orDefault = difficultyStage.getOrDefault(difficultyKey, new ArrayList<>());
                 orDefault.stream().sorted();
@@ -70,7 +69,16 @@ public class JH {
                     result.add(integer);
                 }
             }
-            System.out.println("result = " + result);
+            return arrayFromList(result);
+        }
+
+        private int[] arrayFromList(List<Integer> list){
+            int size = list.size();
+            int[] array = new int[size];
+            for (int i = 0; i < size; i++) {
+                array[i] = list.get(i);
+            }
+            return array;
         }
 
     }
