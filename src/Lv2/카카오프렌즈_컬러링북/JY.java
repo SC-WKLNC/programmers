@@ -41,8 +41,28 @@ public class JY {
                  {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0}, //11
                  {0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0}};//12
 
+        int[][] test5 = new int[][] {
+                {0,0,0,0}
+                ,{0,0,0,0}
+                ,{0,0,0,0}
+                ,{0,0,0,0}
+                ,{0,0,0,0}
+                ,{0,0,0,0}};
+
+
+        int[][] case1 = new int[][] {{1, 0, 0, 0, 0}, {0, 0, 1, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 1}};
+        //5,5 => 3,1
+
+        int[][] case2 = new int[][] {{1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}};
+        // 5,5 => 1,25
+
+        int[][] case3 = new int[][] {{1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 100, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}};
+        // 5,5 -> 2,24
+
+
+
         Solution sol = new Solution();
-        sol.solution(13,16,test3);
+        sol.solution(5,5,case3);
 
 
     }
@@ -60,6 +80,7 @@ public class JY {
 
         public int[] solution(int m, int n, int[][] picture) {
 
+
             ColorBoard colorBoard = new ColorBoard(picture).addBoard();
             Searcher searcher = new Searcher(colorBoard.getMaxX(),colorBoard.getMaxY(),colorBoard.getPixelBoard());
             searcher.search();
@@ -67,10 +88,11 @@ public class JY {
             int[] answer = new int[2];
             answer[0] = searcher.getMaxSector();
             answer[1] = searcher.getMaxSectorCount();
+            System.out.println(answer[0] + "  " + answer[1]);
             return answer;
         }
 
-        public class ColorBoard
+        public static class ColorBoard
         {
             private int MaxX ;
             private int MaxY ;
@@ -97,7 +119,7 @@ public class JY {
             public int getMaxY(){return MaxY;}
         }
 
-        public class Pixel
+        public static class Pixel
         {
             private int x ;
             private int y ;
@@ -118,7 +140,7 @@ public class JY {
             public int getSector() {return sector;}
         }
 
-        public class Searcher {
+        public static class Searcher {
             private int MaxX ;
             private int MaxY ;
             private List<Pixel> Pixels;
@@ -144,7 +166,7 @@ public class JY {
                 if(rightSector(currentPixel,num)|leftSector(currentPixel,num)) return;
                 if(bottomSector(currentPixel,num)) return;
 
-                tempSector++;
+
                 currentPixel.sector = tempSector;
                 tempSector++;
             }
@@ -203,7 +225,7 @@ public class JY {
 
                 chageValue(currentPixel,targetPixel);
 
-                tempSector++;
+
                 currentPixel.sector = targetPixel.getofDefaultSector(tempSector);
                 tempSector++;
                 return true;
