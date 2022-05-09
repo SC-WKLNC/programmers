@@ -63,11 +63,13 @@ public class JY {
                 if(zone.getStage().get(targetRound-1).getPerson().size()==0) return 0.0;
                 // 현재 스테이지에 사람 사이즈 / Maxhuman
                 return (double) zone.getStage().get(targetRound-1).getPerson().size()/maxhuman;
+
             }
             public HashMap<Integer,Double> getFailrate()
             {
                 return failrate;
             }
+
         }
 
 
