@@ -12,6 +12,16 @@ public class JY {
     // 푸드 chicken pizza - 중 택1
     // 점수
     // 모든건 스페이스바로 분열됨.
+    // 1. DataBase
+    // 필드 : 사람들, 쿼리
+    // 함수 : 데이터를 init , get
+    // 2. Matcher
+    // 필드 : Database
+    // 함수 : 각 에트리뷰트마다 Match, 매치한값 카운트하여 리턴
+    // 3. Data
+    // 필드 : 에트리뷰트
+    // 4. EnumContainer
+    // 각 에트리뷰트의 Enum을 가지고있음
     public static void main(String[] args) {
 
         Solution s = new Solution();
