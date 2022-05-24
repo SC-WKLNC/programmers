@@ -1,6 +1,7 @@
 package Lv2.멀쩡한_사격형;
 
 
+import Lv2.멀쩡한_사각형.JH;
 import org.junit.Assert;
 import org.junit.Test;
 

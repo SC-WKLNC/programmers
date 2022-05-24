@@ -1,4 +1,4 @@
-package Lv2.멀쩡한_사격형;
+package Lv2.멀쩡한_사각형;
 
 
 /**
