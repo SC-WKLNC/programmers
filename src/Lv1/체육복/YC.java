@@ -88,7 +88,7 @@ public class YC {
         // 빌려줄 대상 찾기 (앞, 뒤)
         private Optional<Student> searchTargetStudent(final Student student) {
             if(student.isAvailableLent()) {
-                int number = student.getNumber();
+                final int number = student.getNumber();
                 final Optional<Student> beforeStudent = getStudent(number - 1);
                 if(beforeStudent.isPresent())
                     return beforeStudent;

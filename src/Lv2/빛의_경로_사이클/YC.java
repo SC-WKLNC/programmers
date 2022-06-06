@@ -128,20 +128,22 @@ public class YC {
                 final Node node = queue.peek();
                 if(node.isAllEdged())
                     queue.poll();
-                else
+                else {
                     node.getRemainEdge().ifPresent(this::navigate);
+                }
+
             }
         }
 
         private void navigate(final Edge edge) { // 진입해오는 방향을 구하기
-            if(edge.isEdged()) {
-                cycle.add(cycleLength);
-                cycleLength = 0;
-                return;
+            Edge nextEdge = edge;
+            while(nextEdge.isNotEdge()) {
+                nextEdge.edge();
+                cycleLength++;
+                nextEdge = nextEdge.getNextEdge();
             }
-            edge.edge();
-            cycleLength++;
-            navigate(edge.getNextEdge());
+            cycle.add(cycleLength);
+            cycleLength = 0;
         }
 
         public int[] getResult() {
